@@ -18,7 +18,7 @@
 
   <PropertyGroup Label="Nuget Pack Options">
     <Description>Tool to map typesymbols to files.</Description>
-    <PackageVersion>1.0.1</PackageVersion>
+    <PackageVersion>1.0.2</PackageVersion>
     <PackageId>SourceSymbolMapper</PackageId>
     <PackageTags>sourcelink tool symbol</PackageTags>
   </PropertyGroup>

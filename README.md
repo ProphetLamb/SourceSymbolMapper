@@ -48,16 +48,19 @@ Typenames may appear more then once, if the type is `partial`.
 ```json
 [
   {
-    "typename": "SurrealDB.Abstractions.IDatabase\u00601",
+    "type": "SurrealDB.Abstractions.IDatabase\u00601",
     "link": "https://raw.githubusercontent.com/ProphetLamb/Surreal.Net/9050c906117c795ca385fd52b75062771a2a8816/src/Abstractions/Database.cs",
+    "path": "src/Abstractions/Database.cs",
     "start": 6,
     "end": 141
   },
   {
-    "typename": "SurrealDB.Abstractions.IDatabase",
+    "type": "SurrealDB.Abstractions.IDatabase",
     "link": "https://raw.githubusercontent.com/ProphetLamb/Surreal.Net/9050c906117c795ca385fd52b75062771a2a8816/src/Abstractions/Database.cs",
+    "path": "src/Abstractions/Database.cs",
     "start": 141,
     "end": 295
   }
 ]
+
 ```
