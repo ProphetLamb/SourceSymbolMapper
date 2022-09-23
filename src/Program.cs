@@ -53,7 +53,7 @@ static async IAsyncEnumerable<Link> GetTypeLinks(Doc doc, string code)
 
 static async IAsyncEnumerable<BaseTypeDeclarationSyntax> GetTypeSymbols(SyntaxTree doc)
 {
-    var root = (CompilationUnitSyntax)await doc.GetRootAsync();
+    CompilationUnitSyntax root = (CompilationUnitSyntax)await doc.GetRootAsync();
     BaseTypeDeclarationVisitor visitor = new();
     root.Accept(visitor);
     foreach (BaseTypeDeclarationSyntax type in visitor.Nodes)
@@ -65,24 +65,27 @@ static async IAsyncEnumerable<BaseTypeDeclarationSyntax> GetTypeSymbols(SyntaxTr
 
 static (int start, int end) GetLineNo(List<int> lines, TextSpan span)
 {
+    int line = 0;
     int start = -1;
     var en = lines.GetEnumerator();
     while (en.MoveNext())
     {
-        if (span.Start >= en.Current)
+        line += 1;
+        if (span.Start <= en.Current)
         {
             break;
         }
-        start = en.Current;
+        start = line;
     }
     int end = start;
     while (en.MoveNext())
     {
-        if (span.Start >= en.Current)
+        line += 1;
+        if (span.End <= en.Current)
         {
             break;
         }
-        end = en.Current;
+        end = line;
     }
     return (start, end);
 }
@@ -119,6 +122,15 @@ record struct Link(string typename, string link, int start, int end);
 sealed class BaseTypeDeclarationVisitor : CSharpSyntaxVisitor
 {
     public List<BaseTypeDeclarationSyntax> Nodes { get; } = new();
+
+    public override void DefaultVisit(SyntaxNode node)
+    {
+        foreach (SyntaxNode n in node.ChildNodes())
+        {
+            Visit(n);
+        }
+    }
+
 
     public override void VisitClassDeclaration(ClassDeclarationSyntax node)
     {
