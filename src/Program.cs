@@ -34,21 +34,13 @@ static async IAsyncEnumerable<Link> GetRepoTypeLinks(Meta meta, string source)
     foreach (Doc doc in meta.docs)
     {
         string path = Path.Combine(source, doc.name);
-        await foreach (Link l in GetTypeLinks(doc, await File.ReadAllTextAsync(path)))
+        string code = await File.ReadAllTextAsync(path);
+        List<int> lines = GetLineOffsets(code);
+        await foreach (BaseTypeDeclarationSyntax type in GetTypeSymbols(CSharpSyntaxTree.ParseText(code)))
         {
-            yield return new(l.typename, Regex.Replace(linkBase, @"\*", l.link), l.start, l.end);
+            var (start, end) = GetLineNo(lines, type.FullSpan);
+            yield return new(GetFullTypeName(type), Regex.Replace(linkBase, @"\*", doc.name), doc.name, start, end);
         }
-    }
-}
-
-static async IAsyncEnumerable<Link> GetTypeLinks(Doc doc, string code)
-{
-    List<int> lines = GetLineOffsets(code);
-    SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
-    await foreach (BaseTypeDeclarationSyntax type in GetTypeSymbols(tree))
-    {
-        var (start, end) = GetLineNo(lines, type.FullSpan);
-        yield return new(GetFullTypeName(type), doc.name, start, end);
     }
 }
 
@@ -159,7 +151,7 @@ readonly record struct Doc(string name, Guid lang, Guid algo, byte[] hash);
 
 readonly record struct SourceLink(Dictionary<string, string> documents);
 
-record struct Link(string typename, string link, int start, int end);
+readonly record struct Link(string type, string link, string path, int start, int end);
 
 sealed class BaseTypeDeclarationVisitor : CSharpSyntaxVisitor
 {
