@@ -12,7 +12,7 @@
 
   <PropertyGroup>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>extract</ToolCommandName>
+    <ToolCommandName>mapper</ToolCommandName>
     <PackageOutputPath>./publish</PackageOutputPath>
   </PropertyGroup>
 
