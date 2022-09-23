@@ -1,5 +1,7 @@
 # SourceSymbolMapper
 
+[NuGet here](https://www.nuget.org/packages/SourceSymbolMapper)
+
 A tool to relate metadata extracted by [SourceLinkExtract](https://github.com/ProphetLamb/SourceLinkExtract) to assembly typedefinitions
 
 ```bash
