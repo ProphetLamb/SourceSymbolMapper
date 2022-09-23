@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -47,7 +48,7 @@ static async IAsyncEnumerable<Link> GetTypeLinks(Doc doc, string code)
     await foreach (BaseTypeDeclarationSyntax type in GetTypeSymbols(tree))
     {
         var (start, end) = GetLineNo(lines, type.FullSpan);
-        yield return new(type.Identifier.ToString(), doc.name, start, end);
+        yield return new(GetFullTypeName(type), doc.name, start, end);
     }
 }
 
@@ -60,6 +61,47 @@ static async IAsyncEnumerable<BaseTypeDeclarationSyntax> GetTypeSymbols(SyntaxTr
     {
         Console.WriteLine(type.Identifier);
         yield return type;
+    }
+}
+
+static string GetFullTypeName(BaseTypeDeclarationSyntax type)
+{
+    StringBuilder sb = GetTypeNameHierarchy(type).Reverse().Aggregate(new StringBuilder(), (sb, n) => sb.Append(n).Append('.'));
+    sb.Length -= 1;
+    return sb.ToString();
+}
+
+static string GetShortTypeName(BaseTypeDeclarationSyntax type)
+{
+    StringBuilder sb = new();
+    sb.Append(type.Identifier);
+    int typeparams = type is TypeDeclarationSyntax t ? t.TypeParameterList?.Parameters.Count ?? 0 : 0;
+    if (typeparams > 0)
+    {
+        sb.Append($"`{typeparams}");
+    }
+    return sb.ToString();
+}
+
+static IEnumerable<string> GetTypeNameHierarchy(SyntaxNode? node)
+{
+    while (node != null)
+    {
+        string? segment = node switch
+        {
+            BaseTypeDeclarationSyntax t => GetShortTypeName(t),
+            BaseNamespaceDeclarationSyntax n => n.Name.ToString(),
+            _ => null
+        };
+        if (segment is null)
+        {
+            Console.WriteLine($"Unable to construct heritage path. Unknown node type: {node?.GetType()}");
+        }
+        else
+        {
+            yield return segment;
+        }
+        node = node.Parent;
     }
 }
 
