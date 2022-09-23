@@ -5,7 +5,7 @@
 A tool to relate metadata extracted by [SourceLinkExtract](https://github.com/ProphetLamb/SourceLinkExtract) to assembly typedefinitions
 
 ```bash
-dotnet mapper "../meta/metadata.json", "../meta", "../meta/symbols.json"
+mapper "../meta/metadata.json", "../meta", "../meta/symbols.json"
 ```
 
 ## Argument 1
@@ -48,17 +48,16 @@ Typenames may appear more then once, if the type is `partial`.
 ```json
 [
   {
-    "typename": "IDatabase",
+    "typename": "SurrealDB.Abstractions.IDatabase\u00601",
     "link": "https://raw.githubusercontent.com/ProphetLamb/Surreal.Net/9050c906117c795ca385fd52b75062771a2a8816/src/Abstractions/Database.cs",
     "start": 6,
     "end": 141
   },
   {
-    "typename": "IDatabase",
+    "typename": "SurrealDB.Abstractions.IDatabase",
     "link": "https://raw.githubusercontent.com/ProphetLamb/Surreal.Net/9050c906117c795ca385fd52b75062771a2a8816/src/Abstractions/Database.cs",
     "start": 141,
     "end": 295
   }
 ]
-
 ```
