@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SourceSymbolMapper</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>extract</ToolCommandName>
+    <PackageOutputPath>./publish</PackageOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Nuget Pack Options">
+    <Description>Tool to map typesymbols to files.</Description>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageId>SourceSymbolMapper</PackageId>
+    <PackageTags>sourcelink tool symbol</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup></ItemGroup>
+
+  <ItemGroup>
+    <None Include="./README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

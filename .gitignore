@@ -1,0 +1,8 @@
+.vscode/
+.idea/
+publish/
+[Oo]bj/
+[Bb]in/
+*.dll
+*.pdb
+meta/
