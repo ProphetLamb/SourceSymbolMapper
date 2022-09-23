@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -38,7 +33,6 @@ static async IAsyncEnumerable<Link> GetRepoTypeLinks(Meta meta, string source)
     foreach (Doc doc in meta.docs)
     {
         string path = Path.Combine(source, doc.name);
-        List<Link> links = new();
         await foreach (Link l in GetTypeLinks(doc, await File.ReadAllTextAsync(path)))
         {
             yield return new(l.typename, Regex.Replace(linkBase, @"\*", l.link), l.start, l.end);
@@ -64,6 +58,7 @@ static async IAsyncEnumerable<BaseTypeDeclarationSyntax> GetTypeSymbols(SyntaxTr
     root.Accept(visitor);
     foreach (BaseTypeDeclarationSyntax type in visitor.Nodes)
     {
+        Console.WriteLine(type.Identifier);
         yield return type;
     }
 }
